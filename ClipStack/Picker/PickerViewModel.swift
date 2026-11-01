@@ -80,12 +80,19 @@ final class PickerViewModel: ObservableObject {
         // Plain typing goes into the search.
         if flags.isDisjoint(with: [.control, .option]),
            let characters = event.characters, !characters.isEmpty,
-           characters.unicodeScalars.allSatisfy({ !CharacterSet.controlCharacters.contains($0) }) {
+           characters.unicodeScalars.allSatisfy({ Self.isTypable($0) }) {
             query += characters
             selection = 0
             return true
         }
         return false
+    }
+
+    /// Letters, digits and symbols. Not control keys, and not the arrow/function keys,
+    /// which macOS reports as private characters (U+F700 to U+F8FF).
+    private static func isTypable(_ scalar: Unicode.Scalar) -> Bool {
+        if CharacterSet.controlCharacters.contains(scalar) { return false }
+        return !(0xF700...0xF8FF).contains(scalar.value)
     }
 
     func pin(_ item: ClipItem) {

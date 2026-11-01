@@ -26,8 +26,8 @@ enum Paster {
 
     /// Shows the system dialog that leads to the Accessibility settings.
     static func askForPermission() {
-        let key = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
-        _ = AXIsProcessTrustedWithOptions([key: true] as CFDictionary)
+        // Same as kAXTrustedCheckOptionPrompt, written out so it compiles the same on every Xcode version.
+        _ = AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary)
     }
 
     static func openAccessibilitySettings() {

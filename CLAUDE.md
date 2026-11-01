@@ -44,5 +44,4 @@ Plan, progress and "later" ideas: `docs/PLAN.md` (read when starting new work).
   200 lines (`wc -l CLAUDE.md`); put details in `docs/`.
 
 ## Status (2026-11-01)
-- Phase 1 code written in a cloud session; it has NOT been built yet. First job on the Mac: `Tools/clipstack.sh run`
-  and fix any compile errors. See `docs/PLAN.md`.
+- Phase 1 builds and installs on Troy's MacBook Air (2026-11-01). Next: test copying and pasting. See `docs/PLAN.md`.
