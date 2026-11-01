@@ -52,15 +52,17 @@ struct ClipRow: View {
                 }
             case .files:
                 if let imageURL, let image = NSImage(contentsOf: imageURL) {
+                    // A copied picture (for example from Photos): show the picture, not the file name.
                     Image(nsImage: image)
                         .resizable()
                         .scaledToFit()
                         .frame(maxHeight: 80, alignment: .leading)
                         .clipShape(RoundedRectangle(cornerRadius: 4))
+                } else {
+                    Label(item.menuTitle, systemImage: "doc.on.doc")
+                        .lineLimit(2)
+                        .font(.system(size: 13))
                 }
-                Label(item.menuTitle, systemImage: "doc.on.doc")
-                    .lineLimit(2)
-                    .font(.system(size: 13))
             }
             Text(details)
                 .font(.caption2)

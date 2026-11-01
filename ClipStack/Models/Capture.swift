@@ -35,7 +35,7 @@ enum ClipboardReader {
         if let urls = pasteboard.readObjects(forClasses: [NSURL.self],
                                              options: [.urlReadingFileURLsOnly: true]) as? [URL],
            !urls.isEmpty {
-            return .files(urls, preview: picturePreview(urls))
+            return .files(urls, preview: picturePreview(urls, pasteboard: pasteboard))
         }
         if let string = pasteboard.string(forType: .string),
            !string.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
@@ -49,10 +49,13 @@ enum ClipboardReader {
     }
 
     /// PNG of the picture when exactly one image file was copied (for example from Photos).
-    private static func picturePreview(_ urls: [URL]) -> Data? {
+    /// Photos puts the picture itself on the clipboard next to the file, so that is used first:
+    /// App Store apps are often not allowed to open the file directly.
+    private static func picturePreview(_ urls: [URL], pasteboard: NSPasteboard) -> Data? {
         guard urls.count == 1, let url = urls.first,
-              let type = UTType(filenameExtension: url.pathExtension), type.conforms(to: .image),
-              let image = NSImage(contentsOf: url) else { return nil }
+              let type = UTType(filenameExtension: url.pathExtension), type.conforms(to: .image) else { return nil }
+        if let png = readImage(pasteboard) { return png }
+        guard let image = NSImage(contentsOf: url) else { return nil }
         return image.pngData(maxSide: maxImageSide)
     }
 
