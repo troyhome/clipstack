@@ -28,6 +28,11 @@ struct SettingsView: View {
                 .onChange(of: maxItems) { _, _ in controller.store.trimToLimit() }
             }
 
+            Section("List position") {
+                Text("Drag the top bar of the list to move it. It opens there next time.")
+                Button("Open near the mouse again") { PickerController.resetPosition() }
+            }
+
             Section("Pasting") {
                 Text("Pick an item and ClipStack copies it. Then press Command-V to paste.")
             }
