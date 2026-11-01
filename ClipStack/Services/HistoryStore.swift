@@ -28,6 +28,10 @@ final class HistoryStore: ObservableObject {
             var existing = items.remove(at: index)
             existing.date = Date()
             existing.sourceApp = app ?? existing.sourceApp
+            // A picture copied before the preview worked: add the preview now.
+            if case .files(_, let preview?) = capture, existing.imageFile == nil {
+                existing.imageFile = saveImage(preview, id: existing.id)
+            }
             items.insert(existing, at: 0)
             save()
             return
