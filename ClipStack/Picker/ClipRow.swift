@@ -51,6 +51,13 @@ struct ClipRow: View {
                     Label("Image", systemImage: "photo")
                 }
             case .files:
+                if let imageURL, let image = NSImage(contentsOf: imageURL) {
+                    Image(nsImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 80, alignment: .leading)
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                }
                 Label(item.menuTitle, systemImage: "doc.on.doc")
                     .lineLimit(2)
                     .font(.system(size: 13))

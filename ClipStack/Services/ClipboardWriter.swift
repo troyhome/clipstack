@@ -15,7 +15,20 @@ enum ClipboardWriter {
                 pasteboard.writeObjects([image])
             }
         case .files:
-            pasteboard.writeObjects((item.fileURLs ?? []) as [NSURL])
+            let urls = item.fileURLs ?? []
+            // A copied picture (for example from Photos): offer both the file and the picture,
+            // so it pastes into Finder as a file and into Mail, Messages or Notes as a picture.
+            // If the original file is gone by now, only the picture is offered.
+            if let imageURL = store.imageURL(for: item), let png = try? Data(contentsOf: imageURL) {
+                let entry = NSPasteboardItem()
+                if let url = urls.first, FileManager.default.fileExists(atPath: url.path) {
+                    entry.setString(url.absoluteString, forType: .fileURL)
+                }
+                entry.setData(png, forType: .png)
+                pasteboard.writeObjects([entry])
+            } else {
+                pasteboard.writeObjects(urls as [NSURL])
+            }
         }
     }
 }

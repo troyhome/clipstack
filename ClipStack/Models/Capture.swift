@@ -1,10 +1,13 @@
 import AppKit
+import UniformTypeIdentifiers
 
 /// Something freshly read from the system clipboard, before it is saved to history.
 enum Capture {
     case text(String)
     case image(Data)   // PNG data
-    case files([URL])
+    /// Files copied in Finder (or a photo handed over as a file, like Photos does).
+    /// `preview` is PNG data when the copy is a single picture, so the list can show it.
+    case files([URL], preview: Data?)
 }
 
 /// Reads the clipboard and turns it into a `Capture`.
@@ -32,23 +35,67 @@ enum ClipboardReader {
         if let urls = pasteboard.readObjects(forClasses: [NSURL.self],
                                              options: [.urlReadingFileURLsOnly: true]) as? [URL],
            !urls.isEmpty {
-            return .files(urls)
+            return .files(urls, preview: picturePreview(urls))
         }
         if let string = pasteboard.string(forType: .string),
            !string.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
            string.count <= maxTextLength {
             return .text(string)
         }
-        if let image = NSImage(pasteboard: pasteboard), let png = image.pngData() {
+        if let png = readImage(pasteboard) {
             return .image(png)
+        }
+        return nil
+    }
+
+    /// PNG of the picture when exactly one image file was copied (for example from Photos).
+    private static func picturePreview(_ urls: [URL]) -> Data? {
+        guard urls.count == 1, let url = urls.first,
+              let type = UTType(filenameExtension: url.pathExtension), type.conforms(to: .image),
+              let image = NSImage(contentsOf: url) else { return nil }
+        return image.pngData(maxSide: maxImageSide)
+    }
+
+    /// Images are saved no bigger than this (longest side, in pixels) to keep the history small.
+    private static let maxImageSide: CGFloat = 3000
+
+    /// Tries the usual way first, then looks at each clipboard entry for any image format
+    /// (some apps, like Photos, only offer formats such as HEIC or JPEG).
+    private static func readImage(_ pasteboard: NSPasteboard) -> Data? {
+        if let image = NSImage(pasteboard: pasteboard), let png = image.pngData(maxSide: maxImageSide) {
+            return png
+        }
+        for item in pasteboard.pasteboardItems ?? [] {
+            for type in item.types {
+                guard let utType = UTType(type.rawValue), utType.conforms(to: .image),
+                      let data = item.data(forType: type),
+                      let image = NSImage(data: data),
+                      let png = image.pngData(maxSide: maxImageSide) else { continue }
+                return png
+            }
         }
         return nil
     }
 }
 
 extension NSImage {
-    func pngData() -> Data? {
-        guard let tiff = tiffRepresentation, let rep = NSBitmapImageRep(data: tiff) else { return nil }
-        return rep.representation(using: .png, properties: [:])
+    /// PNG data, shrunk so the longest side is at most `maxSide` pixels.
+    func pngData(maxSide: CGFloat) -> Data? {
+        guard let cgImage = cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+        let width = CGFloat(cgImage.width), height = CGFloat(cgImage.height)
+        guard width > 0, height > 0 else { return nil }
+        let scale = min(1, maxSide / max(width, height))
+        if scale >= 1 {
+            return NSBitmapImageRep(cgImage: cgImage).representation(using: .png, properties: [:])
+        }
+        let newWidth = Int(width * scale), newHeight = Int(height * scale)
+        guard let context = CGContext(data: nil, width: newWidth, height: newHeight,
+                                      bitsPerComponent: 8, bytesPerRow: 0,
+                                      space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+        context.interpolationQuality = .high
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+        guard let scaled = context.makeImage() else { return nil }
+        return NSBitmapImageRep(cgImage: scaled).representation(using: .png, properties: [:])
     }
 }

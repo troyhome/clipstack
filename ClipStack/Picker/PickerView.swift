@@ -32,9 +32,14 @@ struct PickerView: View {
                 .lineLimit(1)
             Spacer()
             Text("\(count)").font(.caption).foregroundStyle(.secondary)
+            Image(systemName: "line.3.horizontal")
+                .foregroundStyle(.tertiary)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
+        // Drag the top bar to move the list. It opens there next time.
+        .overlay(WindowDragArea())
+        .help("Drag to move the list")
     }
 
     private func list(_ items: [ClipItem]) -> some View {

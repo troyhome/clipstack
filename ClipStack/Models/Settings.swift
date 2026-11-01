@@ -6,6 +6,8 @@ enum SettingsKeys {
     static let maxItems = "maxItems"
     static let shortcut = "shortcut"
     static let didFirstLaunch = "didFirstLaunch"
+    /// Where the user last dragged the clipboard list (bottom-left corner), if they moved it.
+    static let pickerOrigin = "pickerOrigin"
 }
 
 enum HistoryLimit {

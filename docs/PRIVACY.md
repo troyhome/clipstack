@@ -9,4 +9,4 @@ ClipStack does not collect, send or share any of your data.
 - Items that password managers mark as private are never saved.
 - You can clear the history at any time in ClipStack's Settings. Deleting the app removes it.
 
-Questions: CONTACT_EMAIL (Troy: put the email you want public here)
+Questions: troy@homenchuk.com

@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-/// Shows and hides the clipboard list near the mouse pointer.
+/// Shows and hides the clipboard list: where the user last dragged it, or else near the mouse pointer.
 @MainActor
 final class PickerController {
     static let size = NSSize(width: 380, height: 460)
@@ -9,6 +9,7 @@ final class PickerController {
     private let store: HistoryStore
     private let onChoose: (ClipItem) -> Void
     private var panel: PickerPanel?
+    private var moveObserver: NSObjectProtocol?
 
     init(store: HistoryStore, onChoose: @escaping (ClipItem) -> Void) {
         self.store = store
@@ -29,16 +30,41 @@ final class PickerController {
 
         let panel = PickerPanel(model: model)
         panel.contentView = NSHostingView(rootView: PickerView(model: model, store: store))
-        panel.setFrame(frameNearMouse(), display: true)
+        panel.setFrame(savedFrame() ?? frameNearMouse(), display: true)
         panel.makeKeyAndOrderFront(nil)
         self.panel = panel
+
+        // Remember where the user drags the list.
+        moveObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.didMoveNotification, object: panel, queue: .main
+        ) { [weak panel] _ in
+            MainActor.assumeIsolated {
+                guard let origin = panel?.frame.origin else { return }
+                UserDefaults.standard.set(NSStringFromPoint(origin), forKey: SettingsKeys.pickerOrigin)
+            }
+        }
     }
 
     func close() {
         // Clear first: hiding the panel triggers resignKey, which calls close() again.
         let closing = panel
         panel = nil
+        if let moveObserver { NotificationCenter.default.removeObserver(moveObserver) }
+        moveObserver = nil
         closing?.orderOut(nil)
+    }
+
+    /// Forgets the dragged position, so the list opens near the mouse again.
+    static func resetPosition() {
+        UserDefaults.standard.removeObject(forKey: SettingsKeys.pickerOrigin)
+    }
+
+    /// The spot the user dragged the list to, if it still fits on a connected screen.
+    private func savedFrame() -> NSRect? {
+        guard let saved = UserDefaults.standard.string(forKey: SettingsKeys.pickerOrigin) else { return nil }
+        let frame = NSRect(origin: NSPointFromString(saved), size: Self.size)
+        let fits = NSScreen.screens.contains { $0.visibleFrame.contains(frame) }
+        return fits ? frame : nil
     }
 
     private func frameNearMouse() -> NSRect {
