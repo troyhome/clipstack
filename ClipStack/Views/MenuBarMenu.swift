@@ -4,9 +4,10 @@ import SwiftUI
 struct MenuBarMenu: View {
     @ObservedObject var controller: AppController
     @ObservedObject var store: HistoryStore
+    @AppStorage(SettingsKeys.shortcut) private var shortcut = ShortcutChoice.commandShiftV
 
     var body: some View {
-        Button("Show Clipboard History  (\(ShortcutChoice.current.shortLabel))") {
+        Button("Show Clipboard History  (\(shortcut.shortLabel))") {
             controller.showPicker()
         }
         Divider()
