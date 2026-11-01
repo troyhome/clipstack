@@ -160,6 +160,8 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
+			name = Release;
+		};
 		C1A500000000000000000010 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -175,7 +177,7 @@
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
-			name = Release;
+			name = AppStore;
 		};
 		C1A50000000000000000000E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -229,6 +231,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
+			name = Release;
+		};
 		C1A500000000000000000011 /* AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -256,7 +260,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APPSTORE $(inherited)";
 				SWIFT_VERSION = 5.0;
 			};
-			name = Release;
+			name = AppStore;
 		};
 /* End XCBuildConfiguration section */
 

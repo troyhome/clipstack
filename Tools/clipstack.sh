@@ -16,7 +16,7 @@ build() {
   xcodebuild -project "$APP_NAME.xcodeproj" -scheme "$APP_NAME" \
     -configuration "$config" -derivedDataPath "$BUILD_DIR" \
     -destination "platform=macOS,arch=$(uname -m)" \
-    -allowProvisioningUpdates -quiet build
+    -allowProvisioningUpdates -quiet build || { echo "Build failed. Nothing was installed." >&2; return 1; }
   echo "$BUILD_DIR/Build/Products/$config/$APP_NAME.app"
 }
 
