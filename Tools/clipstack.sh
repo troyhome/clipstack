@@ -15,6 +15,7 @@ build() {
   local config="$1"
   xcodebuild -project "$APP_NAME.xcodeproj" -scheme "$APP_NAME" \
     -configuration "$config" -derivedDataPath "$BUILD_DIR" \
+    -destination "platform=macOS,arch=$(uname -m)" \
     -allowProvisioningUpdates -quiet build
   echo "$BUILD_DIR/Build/Products/$config/$APP_NAME.app"
 }

@@ -1,6 +1,6 @@
 # ClipStack plan
 
-## Phase 1 — working clipboard history (code written 2026-11-01, not yet built)
+## Phase 1 — working clipboard history (built 2026-11-01)
 - [x] Menu bar app, no Dock icon
 - [x] Watch the clipboard: text, images, Finder files; skip password-manager items
 - [x] History saved between restarts, duplicates move to the top, pinning, size limit
@@ -8,7 +8,7 @@
 - [x] List: arrows + Return, Command-1..9, type to search, Command-P pin, Command-Delete remove, Esc close
 - [x] Paste into the app in front (needs Accessibility permission)
 - [x] Open at login, Settings window (shortcut, history size, permission status, clear history)
-- [ ] First build on the Mac and fix compile errors
+- [x] First build on the Mac (built and installed with no errors, 2026-11-01)
 - [ ] Test: copy in Safari/Notes/Finder, paste with the list, restart Mac and check it starts by itself
 
 ## Phase 2 — polish
