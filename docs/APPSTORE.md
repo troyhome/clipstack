@@ -11,7 +11,7 @@ Troy's own copy (`Tools/clipstack.sh install`) still pastes for him.
 ## One-time steps (Troy, by hand)
 1. Xcode > Settings > Accounts: make sure your Apple ID is there (team DA9YJ36D24).
 2. https://appstoreconnect.apple.com > Apps > "+" > New App:
-   platform macOS, name ClipStack (or another if taken), language English,
+   platform macOS, name "ClipStack - Clipboard History" (plain "ClipStack" is taken), language English,
    bundle ID `com.troyhomenchuk.ClipStack`, SKU `clipstack`.
 3. Pricing and Availability: Free.
 4. App Privacy: "Data Not Collected". Privacy Policy URL: a public page with the text from `docs/PRIVACY.md`.
@@ -20,7 +20,7 @@ Troy's own copy (`Tools/clipstack.sh install`) still pastes for him.
 
 ## Listing text
 
-**Name:** ClipStack
+**Name:** ClipStack - Clipboard History (store name only; the app itself is still called ClipStack)
 **Subtitle:** Clipboard history in your menu bar
 **Category:** Utilities
 **Keywords:** clipboard,history,copy,paste,manager,menu bar,pasteboard,snippets,clip
