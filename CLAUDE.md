@@ -25,11 +25,12 @@ Plan, progress and "later" ideas: `docs/PLAN.md` (read when starting new work).
 - Open at login via `SMAppService.mainApp`; turned on automatically on first launch, only when running from /Applications.
 - Architecture: MVVM, small files. Folders: `App/`, `Models/`, `Services/`, `Picker/`, `Views/`.
 - Xcode project uses a synchronized folder (Xcode 16+): new files in `ClipStack/` are picked up automatically.
-- Not sandboxed (direct download build). An App Store build would need a different paste approach (later list).
+- Troy's own build is not sandboxed and pastes for you. The App Store build (configuration "AppStore",
+  `APPSTORE` flag, `Tools/clipstack.sh appstore`) is sandboxed, copy only, asks before open-at-login. See `docs/APPSTORE.md`.
 
 ## Signing
 - Automatic signing, team `DA9YJ36D24` ("Apple Development"), Hardened Runtime on.
-- Plan: notarized Developer ID build for direct download; App Store build later.
+- Plan: free on the Mac App Store (2026-11-01). Notarized direct download maybe later.
 - Never put certificates, passwords or keys in the repo.
 - Accessibility permission is tied to the app's signature. If pasting stops working after an update, remove
   ClipStack from System Settings > Privacy & Security > Accessibility and add it again.

@@ -12,7 +12,7 @@
 - [ ] Test: copy in Safari/Notes/Finder, paste with the list, restart Mac and check it starts by itself
 
 ## Phase 2 — polish
-- [ ] App icon
+- [x] App icon ("Layers", source in `Design/AppIcon.svg`)
 - [ ] Show the list near the text cursor instead of the mouse (needs Accessibility to find the cursor)
 - [ ] Keep rich text (bold, links) when pasting, not only plain text
 - [ ] "Paste as plain text" option (Option-Return)
@@ -25,4 +25,4 @@
 ## Later
 - Any shortcut the user records (not just the three choices)
 - iCloud sync of pinned items between Troy's two Macs
-- App Store build: sandboxed apps can't press keys for you, so it would copy only, or need another approach
+- App Store build: copy only for now (see `docs/APPSTORE.md`); maybe ask Apple about auto-paste later

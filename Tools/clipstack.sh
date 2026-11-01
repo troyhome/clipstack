@@ -1,5 +1,5 @@
 #!/bin/bash
-# ClipStack helper. Usage: Tools/clipstack.sh build|run|install|update
+# ClipStack helper. Usage: Tools/clipstack.sh build|run|install|update|appstore
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -46,8 +46,22 @@ case "${1:-}" in
     git pull
     "$0" install
     ;;
+  appstore)
+    # Builds the App Store version (sandboxed, copy only) and uploads it to App Store Connect.
+    # Needs: your Apple ID added in Xcode > Settings > Accounts, and the app created in App Store Connect.
+    archive="$BUILD_DIR/AppStore/$APP_NAME.xcarchive"
+    rm -rf "$archive"
+    xcodebuild -project "$APP_NAME.xcodeproj" -scheme "$APP_NAME" \
+      -configuration AppStore -derivedDataPath "$BUILD_DIR" \
+      -destination "generic/platform=macOS" \
+      -archivePath "$archive" -allowProvisioningUpdates -quiet archive
+    xcodebuild -exportArchive -archivePath "$archive" \
+      -exportOptionsPlist Tools/AppStoreExport.plist \
+      -exportPath "$BUILD_DIR/AppStore/Export" -allowProvisioningUpdates
+    echo "Uploaded. In a few minutes it shows up in App Store Connect under TestFlight / Build."
+    ;;
   *)
-    echo "Usage: Tools/clipstack.sh build|run|install|update"
+    echo "Usage: Tools/clipstack.sh build|run|install|update|appstore"
     exit 1
     ;;
 esac

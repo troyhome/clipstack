@@ -5,8 +5,17 @@ import Carbon.HIToolbox
 /// Puts a history item back on the clipboard and, if allowed, presses Command-V for the user.
 /// Pressing keys for the user needs Accessibility permission (System Settings >
 /// Privacy & Security > Accessibility). Without it ClipStack only copies.
+///
+/// The App Store build (APPSTORE flag) never presses keys: it only copies, and the
+/// user presses Command-V. Apple's review has rejected clipboard apps that paste for you.
 @MainActor
 enum Paster {
+    #if APPSTORE
+    static let autoPaste = false
+    #else
+    static let autoPaste = true
+    #endif
+
     static func write(_ item: ClipItem, store: HistoryStore) {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
@@ -22,6 +31,12 @@ enum Paster {
         }
     }
 
+    #if APPSTORE
+    static var canPaste: Bool { false }
+    static func askForPermission() {}
+    static func openAccessibilitySettings() {}
+    static func pressCommandV() {}
+    #else
     static var canPaste: Bool { AXIsProcessTrusted() }
 
     /// Shows the system dialog that leads to the Accessibility settings.
@@ -46,4 +61,5 @@ enum Paster {
         down?.post(tap: .cghidEventTap)
         up?.post(tap: .cghidEventTap)
     }
+    #endif
 }
