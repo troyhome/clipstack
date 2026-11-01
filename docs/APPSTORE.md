@@ -14,6 +14,7 @@ So ClipStack puts the item on the clipboard and the user presses Command-V.
    bundle ID `com.troyhomenchuk.ClipStack`, SKU `clipstack`.
 3. Pricing and Availability: Free.
 4. App Privacy: "Data Not Collected". Privacy Policy URL: a public page with the text from `docs/PRIVACY.md`.
+   Contact / support email: troy@homenchuk.com.
 5. Upload: `Tools/clipstack.sh appstore`.
 6. Fill in the listing below, add screenshots (2880x1800 or 1440x900), pick the uploaded build, Submit for Review.
 
