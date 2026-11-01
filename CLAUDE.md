@@ -2,7 +2,7 @@
 
 ClipStack is a small macOS menu bar utility (Swift / SwiftUI) that keeps a clipboard history, like
 Windows Key+V. It starts at login, remembers the last copied items (text, images, Finder files), and a
-shortcut (default Command-Shift-V) opens a list near the mouse; picking an item pastes it into the app in front.
+shortcut (default Command-Shift-V) opens a list near the mouse; picking an item copies it, and the user presses Command-V.
 
 Plan, progress and "later" ideas: `docs/PLAN.md` (read when starting new work).
 
@@ -14,31 +14,28 @@ Plan, progress and "later" ideas: `docs/PLAN.md` (read when starting new work).
 
 ## Decisions already made
 - Name ClipStack, bundle id `com.troyhomenchuk.ClipStack`, minimum macOS 14, menu bar only (LSUIElement, no Dock icon).
-- Picking an item pastes for you (Troy, 2026-11-01): ClipStack writes it to the clipboard, then sends Command-V.
-  That needs Accessibility permission; without it ClipStack only copies and shows the system permission prompt.
+- App Store only, one version (Troy, 2026-11-01): sandboxed, and picking an item only copies it; the user presses
+  Command-V. No Accessibility permission, no key presses (Apple rejects clipboard apps that paste for you, 2.4.5).
 - Shortcut: Command-Shift-V by default; Settings offers Control-Option-V and Command-Option-V.
   Uses Carbon `RegisterEventHotKey` (no Accessibility needed, no global key monitoring).
 - Clipboard is checked twice a second (`changeCount`); macOS has no change notification.
 - Items marked private by password managers (nspasteboard.org Concealed/Transient types) are never saved.
-- History: last 25 by default (10/25/50/100), pinned items always kept. Saved in
-  `~/Library/Application Support/ClipStack/` (`history.json` + `Images/`).
-- Open at login via `SMAppService.mainApp`; turned on automatically on first launch, only when running from /Applications.
+- History: last 25 by default (10/25/50/100), pinned items always kept. Saved in the sandbox container:
+  `~/Library/Containers/com.troyhomenchuk.ClipStack/Data/Library/Application Support/ClipStack/`.
+- Open at login via `SMAppService.mainApp`; a first-launch window asks first (App Store rule).
 - Architecture: MVVM, small files. Folders: `App/`, `Models/`, `Services/`, `Picker/`, `Views/`.
 - Xcode project uses a synchronized folder (Xcode 16+): new files in `ClipStack/` are picked up automatically.
-- Troy's own build is not sandboxed and pastes for you. The App Store build (configuration "AppStore",
-  `APPSTORE` flag, `Tools/clipstack.sh appstore`) is sandboxed, copy only, asks before open-at-login. See `docs/APPSTORE.md`.
+- Free on the Mac App Store as "ClipStack - Clipboard History". Upload with `Tools/clipstack.sh appstore`. See `docs/APPSTORE.md`.
 
 ## Signing
 - Automatic signing, team `DA9YJ36D24` ("Apple Development"), Hardened Runtime on.
-- Plan: free on the Mac App Store (2026-11-01). Notarized direct download maybe later.
 - Never put certificates, passwords or keys in the repo.
-- Accessibility permission is tied to the app's signature. If pasting stops working after an update, remove
-  ClipStack from System Settings > Privacy & Security > Accessibility and add it again.
 
 ## Where the project lives and how to build
 - GitHub: `troyhome/clipstack` (private). On the Macs: `~/Projects/ClipStack`.
 - Build files never go inside the project folder. Use `Tools/clipstack.sh`:
-  `build`, `run` (debug build and open), `install` (optimized copy to /Applications/ClipStack.app), `update` (git pull + install).
+  `build`, `run` (debug build and open), `install` (optimized copy to /Applications/ClipStack.app), `update` (git pull + install),
+  `appstore` (build and upload to App Store Connect).
   Everything builds into `~/Library/Developer/ClipStack`.
 - Building, signing and notarizing only happen on Troy's Mac. Cloud sessions write code and push.
 - After finishing work: commit and `git push`, and say plainly "saved and sent to GitHub". Keep this file under

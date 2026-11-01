@@ -1,13 +1,13 @@
 import AppKit
 
-/// Connects the pieces: clipboard watcher -> history, shortcut -> picker, picker -> paste.
+/// Connects the pieces: clipboard watcher -> history, shortcut -> picker, picker -> clipboard.
 @MainActor
 final class AppController: ObservableObject {
     let store = HistoryStore()
     private let monitor = ClipboardMonitor()
     private var hotKey: HotKey?
     private lazy var picker = PickerController(store: store) { [weak self] item in
-        self?.paste(item)
+        self?.copy(item)
     }
 
     func start() {
@@ -32,44 +32,19 @@ final class AppController: ObservableObject {
         picker.toggle()
     }
 
-    /// Puts the item on the clipboard and pastes it into the app in front.
-    func paste(_ item: ClipItem) {
-        Paster.write(item, store: store)
+    /// Puts the item on the clipboard. The user pastes it with Command-V.
+    func copy(_ item: ClipItem) {
+        ClipboardWriter.write(item, store: store)
         monitor.ignoreCurrentChange()
         store.promote(item)
-        // App Store build: copy only, the user presses Command-V.
-        guard Paster.autoPaste else { return }
-        guard Paster.canPaste else {
-            Paster.askForPermission()
-            return
-        }
-        // Short pause so the picker is gone and the other app has keyboard focus again.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
-            Paster.pressCommandV()
-        }
     }
 
+    /// First launch: explain how it works and ask before opening at login (App Store rule).
     private func firstLaunchSetup() {
         let defaults = UserDefaults.standard
         guard !defaults.bool(forKey: SettingsKeys.didFirstLaunch) else { return }
         defaults.set(true, forKey: SettingsKeys.didFirstLaunch)
-        #if APPSTORE
-        // App Store rules: ask before opening at login.
-        welcome()
-        #else
-        // Only the installed copy should open at login, not test builds.
-        if Bundle.main.bundlePath.hasPrefix("/Applications/") {
-            LoginItem.set(true)
-        }
-        if !Paster.canPaste {
-            Paster.askForPermission()
-        }
-        #endif
-    }
 
-    #if APPSTORE
-    /// First-launch window: how it works, and whether to open at login.
-    private func welcome() {
         let alert = NSAlert()
         alert.messageText = "Welcome to ClipStack"
         alert.informativeText = """
@@ -85,5 +60,4 @@ final class AppController: ObservableObject {
             LoginItem.set(true)
         }
     }
-    #endif
 }

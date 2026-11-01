@@ -1,12 +1,11 @@
 # ClipStack on the Mac App Store
 
-Free app. The App Store version is built with `Tools/clipstack.sh appstore`
-(build setting "AppStore": sandboxed, copy only, asks before opening at login).
+Free app. There is only one version: the App Store one (sandboxed, copy only, asks before
+opening at login). Upload it with `Tools/clipstack.sh appstore`.
 
 ## Why copy only
 Apple's review has rejected clipboard apps that press Command-V for you (Guideline 2.4.5, 2026).
-So the App Store version puts the item on the clipboard and the user presses Command-V.
-Troy's own copy (`Tools/clipstack.sh install`) still pastes for him.
+So ClipStack puts the item on the clipboard and the user presses Command-V.
 
 ## One-time steps (Troy, by hand)
 1. Xcode > Settings > Accounts: make sure your Apple ID is there (team DA9YJ36D24).

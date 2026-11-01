@@ -47,12 +47,12 @@ case "${1:-}" in
     "$0" install
     ;;
   appstore)
-    # Builds the App Store version (sandboxed, copy only) and uploads it to App Store Connect.
+    # Builds the app and uploads it to App Store Connect.
     # Needs: your Apple ID added in Xcode > Settings > Accounts, and the app created in App Store Connect.
     archive="$BUILD_DIR/AppStore/$APP_NAME.xcarchive"
     rm -rf "$archive"
     xcodebuild -project "$APP_NAME.xcodeproj" -scheme "$APP_NAME" \
-      -configuration AppStore -derivedDataPath "$BUILD_DIR" \
+      -configuration Release -derivedDataPath "$BUILD_DIR" \
       -destination "generic/platform=macOS" \
       -archivePath "$archive" -allowProvisioningUpdates -quiet archive
     xcodebuild -exportArchive -archivePath "$archive" \
