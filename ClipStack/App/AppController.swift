@@ -37,6 +37,8 @@ final class AppController: ObservableObject {
         Paster.write(item, store: store)
         monitor.ignoreCurrentChange()
         store.promote(item)
+        // App Store build: copy only, the user presses Command-V.
+        guard Paster.autoPaste else { return }
         guard Paster.canPaste else {
             Paster.askForPermission()
             return
@@ -51,6 +53,10 @@ final class AppController: ObservableObject {
         let defaults = UserDefaults.standard
         guard !defaults.bool(forKey: SettingsKeys.didFirstLaunch) else { return }
         defaults.set(true, forKey: SettingsKeys.didFirstLaunch)
+        #if APPSTORE
+        // App Store rules: ask before opening at login.
+        welcome()
+        #else
         // Only the installed copy should open at login, not test builds.
         if Bundle.main.bundlePath.hasPrefix("/Applications/") {
             LoginItem.set(true)
@@ -58,5 +64,26 @@ final class AppController: ObservableObject {
         if !Paster.canPaste {
             Paster.askForPermission()
         }
+        #endif
     }
+
+    #if APPSTORE
+    /// First-launch window: how it works, and whether to open at login.
+    private func welcome() {
+        let alert = NSAlert()
+        alert.messageText = "Welcome to ClipStack"
+        alert.informativeText = """
+            ClipStack remembers what you copy. Press \(ShortcutChoice.current.shortLabel) to see the list, \
+            pick an item, then press Command-V to paste it.
+
+            Open ClipStack automatically when you log in?
+            """
+        alert.addButton(withTitle: "Open at Login")
+        alert.addButton(withTitle: "Not Now")
+        NSApp.activate(ignoringOtherApps: true)
+        if alert.runModal() == .alertFirstButtonReturn {
+            LoginItem.set(true)
+        }
+    }
+    #endif
 }

@@ -25,4 +25,4 @@
 ## Later
 - Any shortcut the user records (not just the three choices)
 - iCloud sync of pinned items between Troy's two Macs
-- App Store build: sandboxed apps can't press keys for you, so it would copy only, or need another approach
+- App Store build: copy only for now (see `docs/APPSTORE.md`); maybe ask Apple about auto-paste later

@@ -75,7 +75,9 @@ struct PickerView: View {
     }
 
     private var footer: some View {
-        Text("Return paste   ⌘1-9 quick paste   ⌘P pin   ⌘⌫ remove   Esc close")
+        Text(Paster.autoPaste
+             ? "Return paste   ⌘1-9 quick paste   ⌘P pin   ⌘⌫ remove   Esc close"
+             : "Return copy   ⌘1-9 quick copy   ⌘P pin   ⌘⌫ remove   Esc close")
             .font(.caption2)
             .foregroundStyle(.secondary)
             .padding(.vertical, 6)
