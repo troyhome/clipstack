@@ -6,7 +6,6 @@ struct SettingsView: View {
     @AppStorage(SettingsKeys.maxItems) private var maxItems = HistoryLimit.defaultValue
     @AppStorage(SettingsKeys.shortcut) private var shortcut = ShortcutChoice.commandShiftV
     @State private var openAtLogin = LoginItem.isEnabled
-    @State private var canPaste = Paster.canPaste
 
     var body: some View {
         Form {
@@ -30,20 +29,7 @@ struct SettingsView: View {
             }
 
             Section("Pasting") {
-                if Paster.autoPaste {
-                    HStack {
-                        Text(canPaste
-                             ? "ClipStack pastes for you."
-                             : "ClipStack can only copy. Allow it under Accessibility to paste for you.")
-                        Spacer()
-                        if !canPaste {
-                            Button("Open Settings") { Paster.openAccessibilitySettings() }
-                        }
-                    }
-                    Button("Check again") { canPaste = Paster.canPaste }
-                } else {
-                    Text("Pick an item and ClipStack copies it. Then press Command-V to paste.")
-                }
+                Text("Pick an item and ClipStack copies it. Then press Command-V to paste.")
             }
 
             Section("History") {
@@ -57,7 +43,6 @@ struct SettingsView: View {
         .onAppear {
             NSApp.activate(ignoringOtherApps: true)
             openAtLogin = LoginItem.isEnabled
-            canPaste = Paster.canPaste
         }
     }
 }

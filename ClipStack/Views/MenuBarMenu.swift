@@ -16,7 +16,7 @@ struct MenuBarMenu: View {
         } else {
             ForEach(store.items.prefix(10)) { item in
                 Button(item.pinned ? "Pinned: " + item.menuTitle : item.menuTitle) {
-                    controller.paste(item)
+                    controller.copy(item)
                 }
             }
         }
