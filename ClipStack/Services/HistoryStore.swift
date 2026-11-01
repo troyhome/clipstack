@@ -40,23 +40,33 @@ final class HistoryStore: ObservableObject {
         case .text(let string):
             item.kind = .text
             item.text = string
-        case .files(let urls):
+        case .files(let urls, let preview):
             item.kind = .files
             item.fileURLs = urls
-        case .image(let png):
-            let name = "\(id.uuidString).png"
-            do {
-                try png.write(to: imagesFolder.appendingPathComponent(name), options: .atomic)
-            } catch {
-                NSLog("ClipStack: could not save image: \(error)")
-                return
+            if let preview {
+                // Optional: if saving the picture fails, the item still works as a file.
+                item.imageFile = saveImage(preview, id: id)
             }
+        case .image(let png):
+            guard let name = saveImage(png, id: id) else { return }
             item.kind = .image
             item.imageFile = name
         }
         items.insert(item, at: 0)
         trimToLimit()
         save()
+    }
+
+    /// Saves PNG data in the Images folder and returns its file name, or nil if it failed.
+    private func saveImage(_ png: Data, id: UUID) -> String? {
+        let name = "\(id.uuidString).png"
+        do {
+            try png.write(to: imagesFolder.appendingPathComponent(name), options: .atomic)
+            return name
+        } catch {
+            NSLog("ClipStack: could not save image: \(error)")
+            return nil
+        }
     }
 
     // MARK: - Changing
@@ -145,7 +155,7 @@ final class HistoryStore: ObservableObject {
             return "t:" + hash(Data(string.utf8))
         case .image(let png):
             return "i:" + hash(png)
-        case .files(let urls):
+        case .files(let urls, _):
             return "f:" + urls.map(\.path).joined(separator: "\n")
         }
     }

@@ -5,7 +5,9 @@ import UniformTypeIdentifiers
 enum Capture {
     case text(String)
     case image(Data)   // PNG data
-    case files([URL])
+    /// Files copied in Finder (or a photo handed over as a file, like Photos does).
+    /// `preview` is PNG data when the copy is a single picture, so the list can show it.
+    case files([URL], preview: Data?)
 }
 
 /// Reads the clipboard and turns it into a `Capture`.
@@ -33,7 +35,7 @@ enum ClipboardReader {
         if let urls = pasteboard.readObjects(forClasses: [NSURL.self],
                                              options: [.urlReadingFileURLsOnly: true]) as? [URL],
            !urls.isEmpty {
-            return .files(urls)
+            return .files(urls, preview: picturePreview(urls))
         }
         if let string = pasteboard.string(forType: .string),
            !string.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
@@ -44,6 +46,14 @@ enum ClipboardReader {
             return .image(png)
         }
         return nil
+    }
+
+    /// PNG of the picture when exactly one image file was copied (for example from Photos).
+    private static func picturePreview(_ urls: [URL]) -> Data? {
+        guard urls.count == 1, let url = urls.first,
+              let type = UTType(filenameExtension: url.pathExtension), type.conforms(to: .image),
+              let image = NSImage(contentsOf: url) else { return nil }
+        return image.pngData(maxSide: maxImageSide)
     }
 
     /// Images are saved no bigger than this (longest side, in pixels) to keep the history small.
