@@ -21,8 +21,9 @@ So ClipStack puts the item on the clipboard and the user presses Command-V.
 ## Listing text
 
 **Name:** ClipStack - Clipboard History (store name only; the app itself is still called ClipStack)
-**Subtitle:** Clipboard history in your menu bar
-**Category:** Utilities
+**Subtitle:** Find anything you copied (30 letters max)
+**Category:** Utilities (secondary: Productivity)
+**Privacy Policy and Support URL:** https://docs.google.com/document/d/1Gltk3lQYpiAli3h7S1VdMOKQWeFsJtZk7g5fyMMTkOE/view (Google Doc in Troy's Drive, shared "Anyone with the link")
 **Keywords:** clipboard,history,copy,paste,manager,menu bar,pasteboard,snippets,clip
 
 **Description:**
