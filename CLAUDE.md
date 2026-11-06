@@ -41,7 +41,9 @@ Plan, progress and "later" ideas: `docs/PLAN.md` (read when starting new work).
 - After finishing work: commit and `git push`, and say plainly "saved and sent to GitHub". Keep this file under
   200 lines (`wc -l CLAUDE.md`); put details in `docs/`.
 
-## Status (2026-11-02)
-- Version 1.0 submitted to App Review (2026-11-02), set to release automatically when approved.
+## Status (2026-11-06)
+- Version 1.0 submitted 2026-11-02; Apple asked for more information (2.1 App Completeness: screen recording,
+  purpose, how to use it). Answered with a screen recording and new review notes, resubmitted 2026-11-05:
+  "Waiting for Review". Set to release automatically when approved.
   Store page done (screenshots in project files, privacy/support page is a public Google Doc, see `docs/APPSTORE.md`).
   Next: wait for Apple's answer; fix anything they flag.

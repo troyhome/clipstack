@@ -18,9 +18,9 @@
 - [ ] "Paste as plain text" option (Option-Return)
 - [ ] Ignore list: apps whose copies are never saved
 
-## Phase 3 — release
-- [ ] Notarized Developer ID build (`dmg`/`release` commands in `Tools/clipstack.sh`, like MacBee)
-- [ ] Simple update check
+## Phase 3 — release (App Store only, 2026-11-01; updates come through the App Store)
+- [x] Version 1.0 submitted to App Review (2026-11-02), resubmitted with more information (2026-11-05)
+- [ ] Approved and live on the Mac App Store
 
 ## Later
 - Any shortcut the user records (not just the three choices)
