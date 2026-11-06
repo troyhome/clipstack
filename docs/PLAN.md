@@ -9,7 +9,7 @@
 - [x] Copy the picked item (user presses Command-V; App Store only, 2026-11-01)
 - [x] Open at login, Settings window (shortcut, history size, permission status, clear history)
 - [x] First build on the Mac (built and installed with no errors, 2026-11-01)
-- [ ] Test: copy in Safari/Notes/Finder, paste with the list, restart Mac and check it starts by itself
+- [x] Test: copy in Safari/Notes/Finder/Photos, paste with the list (Troy, 2026-11-01)
 
 ## Phase 2 — polish
 - [x] App icon ("Layers", source in `Design/AppIcon.svg`)
@@ -18,9 +18,11 @@
 - [ ] "Paste as plain text" option (Option-Return)
 - [ ] Ignore list: apps whose copies are never saved
 
-## Phase 3 — release
-- [ ] Notarized Developer ID build (`dmg`/`release` commands in `Tools/clipstack.sh`, like MacBee)
-- [ ] Simple update check
+## Phase 3 — release (App Store only, no separate download version)
+- [x] Store page, screenshots, privacy page, age rating, price Free
+- [x] Submitted 2026-11-01; Apple asked for more info (2.1) on 2026-11-02
+- [x] Replied with video + answers, filled App Review Notes, resubmitted 2026-11-05 ("Waiting for Review")
+- [ ] Approved and live on the Mac App Store
 
 ## Later
 - Any shortcut the user records (not just the three choices)
