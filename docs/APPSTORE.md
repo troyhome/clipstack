@@ -43,3 +43,12 @@ Pick one and it is ready to paste with Command-V.
 **Review notes (for Apple):**
 ClipStack is a menu bar app with no Dock icon. Click the clipboard icon in the menu bar, or press
 Command-Shift-V, to open the history list. Copy some text first so the list has items.
+
+**Review notes in use since the 2026-11-05 resubmission** (Apple asked for a screen recording and more detail):
+answers six questions: screen recording (attached to the reply in App Review), purpose and audience, how to use it
+(no login, menu bar, Command-Shift-V, pick, Command-V), external services (none), regional differences (none),
+regulated or third-party material (not applicable).
+
+**Resubmitting after a rejection:** edit the version, Save, click "Update Review" on the version page, then
+"Resubmit to App Review" on the submission page, then reload and check it says "Waiting for Review".
+Clicking Resubmit right after Save sends nothing.
