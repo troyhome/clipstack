@@ -19,6 +19,7 @@ So ClipStack puts the item on the clipboard and the user presses Command-V.
 6. Fill in the listing below, add screenshots (2880x1800 or 1440x900), pick the uploaded build, Submit for Review.
 
 ## Listing text
+(2026-11-13: new subtitle, keywords and description after the 4.3 rejection are in `docs/APPSTORE-4.3.md`.)
 
 **Name:** ClipStack - Clipboard History (store name only; the app itself is still called ClipStack)
 **Subtitle:** Find anything you copied (30 letters max)

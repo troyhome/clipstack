@@ -41,8 +41,8 @@ Plan, progress and "later" ideas: `docs/PLAN.md` (read when starting new work).
 - After finishing work: commit and `git push`, and say plainly "saved and sent to GitHub". Keep this file under
   200 lines (`wc -l CLAUDE.md`); put details in `docs/`.
 
-## Status (2026-11-05)
-- Version 1.0 is "Waiting for Review" (resubmitted 2026-11-05 after Apple's 2.1 "Information Needed"), auto-release on approval.
+## Status (2026-11-13)
+- Version 1.0 is "Waiting for Review" (resubmitted 2026-11-13 after a 4.3(a) Spam rejection; reply, new store text and appeal in `docs/APPSTORE-4.3.md`), auto-release on approval.
   Store page done (screenshots in project files, privacy/support page is a public Google Doc, see `docs/APPSTORE.md`).
 - After a rejection: fill App Review Notes, Save, "Update Review" on the version page, then "Resubmit to App Review",
   and only call it done when the page says "Waiting for Review".
