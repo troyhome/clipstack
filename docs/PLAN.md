@@ -22,7 +22,7 @@
 - [x] Store page, screenshots, privacy page, age rating, price Free
 - [x] Submitted 2026-11-01; Apple asked for more info (2.1) on 2026-11-02
 - [x] Replied with video + answers, filled App Review Notes, resubmitted 2026-11-05 ("Waiting for Review")
-- [ ] Rejected 2026-11-13 for 4.3(a) Spam; reply, new store text and appeal in `docs/APPSTORE-4.3.md`
+- [x] Rejected 2026-11-13 for 4.3(a) Spam; replied, updated store text, resubmitted same day ("Waiting for Review"). Appeal text in `docs/APPSTORE-4.3.md`
 - [ ] Approved and live on the Mac App Store
 
 ## Later
